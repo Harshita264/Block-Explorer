@@ -1,36 +1,46 @@
-import { Alchemy, Network } from 'alchemy-sdk';
-import { useEffect, useState } from 'react';
-
+import React, {useState} from 'react';
+import Navigation from './components/Navigation';
+import BlockExplorer from './components/BlockExplorer';
+import AccountLookup from './components/AccountLookup';
+import NFTTools from './components/NFTTools';
+import TransferHistory from './components/TransferHistory';
 import './App.css';
 
-// Refer to the README doc for more information about using API
-// keys in client-side code. You should never do this in production
-// level code.
-const settings = {
-  apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
-  network: Network.ETH_MAINNET,
-};
-
-
-// In this week's lessons we used ethers.js. Here we are using the
-// Alchemy SDK is an umbrella library with several different packages.
-//
-// You can read more about the packages here:
-//   https://docs.alchemy.com/reference/alchemy-sdk-api-surface-overview#api-surface
-const alchemy = new Alchemy(settings);
-
 function App() {
-  const [blockNumber, setBlockNumber] = useState();
+  const [currentPage, setCurrentPage] = useState('blocks');
+  const [selectedBlock, setSelectedBlock] = useState(null);
+  const [selectedTx, setSelectedTx] = useState(null);
 
-  useEffect(() => {
-    async function getBlockNumber() {
-      setBlockNumber(await alchemy.core.getBlockNumber());
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'blocks':
+        return(
+          <BlockExplorer 
+          selectedBlock = {selectedBlock}
+          setSelectedBlock = {setSelectedBlock}
+          selectedTx = {setSelectedTx}
+          setSelectedTx = {setSelectedTx}
+          />
+        );
+
+        case 'accounts':
+          return <AccountLookup />;
+          case 'nft':
+            return <NFTTools />
+            case 'transfers':
+              return <TransferHistory />;
+              default:
+                return <BlockExplorer />;
     }
+  };
 
-    getBlockNumber();
-  });
-
-  return <div className="App">Block Number: {blockNumber}</div>;
+  return (
+    <div className = "min-h-screen bg-gray-100">
+      <Navigation currentPage = {currentPage} setCurrentPage={setCurrentPage}/>
+      <div className = "max-w-7xl mx-auto px-4">
+        {renderPage()}
+      </div>
+    </div>
+  );
 }
-
 export default App;
