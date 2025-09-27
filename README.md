@@ -37,3 +37,5 @@ Alchemy SDK – Blockchain queries
 JavaScript / Ethers.js (under the hood)
 
 dotenv – For managing API keys
+
+Vercel deployed link: https://block-explorer-kohl.vercel.app/
